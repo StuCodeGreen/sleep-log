@@ -2,8 +2,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import { useState } from 'react';
-import { gql } from '@apollo/client';
-
+import { gql, useQuery } from '@apollo/client';
+import {client} from '../apollo-client'
 const MY_QUERY_QUERY = gql`
   query MyQuery {
     logs {
@@ -17,34 +17,12 @@ const MY_QUERY_QUERY = gql`
   }
 `;
 
-// export async function getStaticProps() {
-//   const { data } = await client.query({
-//     query: gql`
-//       query MyQuery {
-//     logs {
-//       bed_time
-//       created_at
-//       id
-//       note
-//       updated_at
-//       wakeup_time
-//     }
-//   }
-//     `,
-//   });
-
-//   return {
-//     props: {
-//       sleeplog: data.logs,
-//     },
-//  };
-// }
-
-export default function Home() {
+export default function Home({sleeplog}) {
   // const {loading, error, data} = useQuery(MY_QUERY_QUERY);
   // console.log(loading)
   // console.log(error)
   // console.log(data)
+  console.log(sleeplog)
   return (
     <div className={styles.container}>
       <Head>
@@ -110,4 +88,27 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: gql`
+      query MyQuery {
+    logs {
+      bed_time
+      created_at
+      id
+      note
+      updated_at
+      wakeup_time
+    }
+  }
+    `,
+  });
+
+  return {
+    props: {
+      sleeplog: data.logs,
+    },
+ };
 }
