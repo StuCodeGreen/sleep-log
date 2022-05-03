@@ -1,28 +1,14 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
-import {client} from '../apollo-client'
-const MY_QUERY_QUERY = gql`
-  query MyQuery {
-    logs {
-      bed_time
-      created_at
-      id
-      note
-      updated_at
-      wakeup_time
-    }
-  }
-`;
+// import { useState } from 'react';
+// import { gql, useQuery } from '@apollo/client';
+// import { client } from '../apollo-client';
+import ClientOnly from '../components/ClientOnly';
+import SleepLog from '../components/SleepLog';
 
-export default function Home({sleeplog}) {
-  // const {loading, error, data} = useQuery(MY_QUERY_QUERY);
-  // console.log(loading)
-  // console.log(error)
-  // console.log(data)
-  console.log(sleeplog)
+export default function Home() {
+  // console.log(sleeplog)
   return (
     <div className={styles.container}>
       <Head>
@@ -31,6 +17,9 @@ export default function Home({sleeplog}) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
+        <ClientOnly>
+          <SleepLog />
+        </ClientOnly>
         <h1 className={styles.title}>
           Welcome to{' '}
           <a href='https://nextjs.org' className='text-2xl'>
@@ -90,25 +79,25 @@ export default function Home({sleeplog}) {
   );
 }
 
-export async function getStaticProps() {
-  const { data } = await client.query({
-    query: gql`
-      query MyQuery {
-    logs {
-      bed_time
-      created_at
-      id
-      note
-      updated_at
-      wakeup_time
-    }
-  }
-    `,
-  });
+// export async function getStaticProps() {
+//   const { data } = await client.query({
+//     query: gql`
+//       query MyQuery {
+//     logs {
+//       bed_time
+//       created_at
+//       id
+//       note
+//       updated_at
+//       wakeup_time
+//     }
+//   }
+//     `,
+//   });
 
-  return {
-    props: {
-      sleeplog: data.logs,
-    },
- };
-}
+//   return {
+//     props: {
+//       sleeplog: data.logs,
+//     },
+//  };
+// }
