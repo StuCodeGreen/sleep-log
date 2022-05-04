@@ -5,12 +5,24 @@ function createClient() {
     link: new HttpLink({
       uri: 'https://musical-pangolin-83.hasura.app/v1/graphql',
       headers: {
-        'x-hasura-admin-secret': process.env.NEXT_PUBLIC_REACT_APP_HASURA_SECRET,
+        'x-hasura-admin-secret': process.env.HASURA_SECRET,
       },
     }),
-    cache: new InMemoryCache(),
+    // cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            logs: {
+              merge(existing = [], incoming) {
+                return { ...existing, ...incoming };
+              }
+            }
+          }
+        }
+      }
+    })
   });
 }
 
 export const client = createClient();
-

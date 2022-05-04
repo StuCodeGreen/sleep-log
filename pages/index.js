@@ -1,13 +1,12 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-// import { useState } from 'react';
-// import { gql, useQuery } from '@apollo/client';
-// import { client } from '../apollo-client';
-import ClientOnly from '../components/ClientOnly';
+import { gql } from '@apollo/client';
+import { client } from '../apollo-client';
 import SleepLog from '../components/SleepLog';
+import Link from 'next/link'
 
-export default function Home() {
+export default function Home({sleeplog}) {
   // console.log(sleeplog)
   return (
     <div className={styles.container}>
@@ -17,9 +16,11 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        <ClientOnly>
-          <SleepLog />
-        </ClientOnly>
+      <Link href="/info">
+          <a>Info</a>
+        </Link>
+          <SleepLog data={sleeplog} />
+
         <h1 className={styles.title}>
           Welcome to{' '}
           <a href='https://nextjs.org' className='text-2xl'>
@@ -79,25 +80,25 @@ export default function Home() {
   );
 }
 
-// export async function getStaticProps() {
-//   const { data } = await client.query({
-//     query: gql`
-//       query MyQuery {
-//     logs {
-//       bed_time
-//       created_at
-//       id
-//       note
-//       updated_at
-//       wakeup_time
-//     }
-//   }
-//     `,
-//   });
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: gql`
+      query MyQuery {
+    logs {
+      bed_time
+      created_at
+      id
+      note
+      updated_at
+      wakeup_time
+    }
+  }
+    `,
+  });
 
-//   return {
-//     props: {
-//       sleeplog: data.logs,
-//     },
-//  };
-// }
+  return {
+    props: {
+      sleeplog: data.logs,
+    },
+ };
+}
