@@ -4,6 +4,7 @@ import SleepLog from '../components/SleepLog';
 import Link from 'next/link'
 
 export default function Info({sleeplog}){
+  console.log("getServerSideProps-", sleeplog)
   return (
     <div>
        <Link href="/">
